@@ -1,6 +1,6 @@
 # Privacy Policy — Vaulted Desktop
 
-_Last updated: 11 September 2026_
+_Last updated: 12 September 2026_
 
 Vaulted Desktop ("Vaulted") is a desktop client for HashiCorp Vault, published
 by **IronMade**.
@@ -27,6 +27,7 @@ Everything stays on your computer.
 | Secret values you view | Process memory only | Wiped when the session ends, locks, or the app closes. Never written to disk |
 | Search index | Process memory only | Never written to disk; discarded when you sign out |
 | Preferences — appearance, idle-lock timeout | The same local configuration file | Contains no personal data |
+| Your licence | Held by Windows, not by Vaulted | Vaulted stores no licence key, serial or receipt of its own |
 
 Uninstalling Vaulted removes the application. Remove a remembered token
 beforehand with **Log out & forget token**, or delete the entry from Windows
@@ -48,6 +49,14 @@ Credential Manager afterwards.
    public GitHub release feed. Update checks reveal nothing about you beyond
    what any download request reveals — they carry no identifier and no
    information about your servers or secrets.
+4. **The Microsoft Store licence service**, on Windows only. Vaulted is sold
+   as a 15-day trial followed by a one-time purchase, and it asks Windows
+   whether this copy is trialling, purchased, or expired. That question goes
+   to Microsoft, under their terms, and never to IronMade — we receive no
+   notification that you installed it, tried it, or bought it beyond the sales
+   figures Partner Center reports to any publisher. Buying opens Microsoft's
+   own purchase flow; Vaulted never sees your payment details, and there is no
+   account to create with us.
 
 There are no other network connections.
 
@@ -81,8 +90,10 @@ Because Vaulted collects nothing, changes are expected to be rare.
 
 ## Contact
 
-Questions about privacy: open an issue at
-<https://github.com/WhisKeySwitch/vaulted-releases/issues>.
+Questions about privacy, or anything else: **support@ironmade.site**.
 
-Please note that GitHub issues are public. Do not include secrets, tokens or
-server addresses in a report.
+You can also open an issue at
+<https://github.com/WhisKeySwitch/vaulted-releases/issues>, but GitHub issues
+are public. Email is the right channel for anything you would rather not have
+indexed, and in either case please do not include secrets, tokens or server
+addresses.
