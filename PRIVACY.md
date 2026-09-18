@@ -1,6 +1,6 @@
 # Privacy Policy — Vaulted Desktop
 
-_Last updated: 12 September 2026_
+_Last updated: 18 September 2026_
 
 Vaulted Desktop ("Vaulted") is a desktop client for HashiCorp Vault, published
 by **IronMade**.
@@ -27,7 +27,7 @@ Everything stays on your computer.
 | Secret values you view | Process memory only | Wiped when the session ends, locks, or the app closes. Never written to disk |
 | Search index | Process memory only | Never written to disk; discarded when you sign out |
 | Preferences — appearance, idle-lock timeout | The same local configuration file | Contains no personal data |
-| Your licence | Held by Windows, not by Vaulted | Vaulted stores no licence key, serial or receipt of its own |
+| Your licence | Held by the Microsoft Store (Windows) or the Mac App Store (macOS App Store build), not by Vaulted | Vaulted stores no licence key, serial, receipt or trial clock of its own. The macOS build downloaded directly is free and has no licence at all |
 
 Uninstalling Vaulted removes the application. Remove a remembered token
 beforehand with **Log out & forget token**, or delete the entry from Windows
@@ -49,14 +49,19 @@ Credential Manager afterwards.
    public GitHub release feed. Update checks reveal nothing about you beyond
    what any download request reveals — they carry no identifier and no
    information about your servers or secrets.
-4. **The Microsoft Store licence service**, on Windows only. Vaulted is sold
-   as a 15-day trial followed by a one-time purchase, and it asks Windows
-   whether this copy is trialling, purchased, or expired. That question goes
-   to Microsoft, under their terms, and never to IronMade — we receive no
-   notification that you installed it, tried it, or bought it beyond the sales
-   figures Partner Center reports to any publisher. Buying opens Microsoft's
-   own purchase flow; Vaulted never sees your payment details, and there is no
-   account to create with us.
+4. **Your platform's store licence service.** Vaulted is sold as a 15-day
+   trial followed by a one-time purchase, and it asks the store whether this
+   copy is trialling, purchased, or expired. On Windows that question goes to
+   Microsoft through the Windows Store licence API; on the Mac App Store
+   build it goes to Apple through StoreKit, which also handles starting the
+   free trial (a $0 in-app purchase), buying, and restoring a purchase under
+   your Apple ID. Either way it goes to the platform under their terms, and
+   never to IronMade — we receive no notification that you installed it,
+   tried it, or bought it beyond the sales figures the stores report to any
+   publisher. Buying opens the store's own purchase flow; Vaulted never sees
+   your payment details, and there is no account to create with us. The macOS
+   build downloaded directly from GitHub Releases is free and makes no
+   licence request at all.
 
 There are no other network connections.
 
