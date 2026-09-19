@@ -18,7 +18,12 @@ A **profile** is a saved connection to one Vault cluster.
     plain-HTTP dev server — the app detects that and tells you to use
     `http://`.
   - **Namespace** *(optional)* — applied to every request (Vault Enterprise).
-  - **CA certificate path** *(optional)* — a custom CA to trust.
+  - **CA certificate** *(optional)* — a custom CA to trust. **Choose file…**
+    opens the system file dialog; the certificate itself (not its path) is
+    stored with the profile, so moving or deleting the original file later
+    changes nothing. A profile saved by an older version that pointed at a
+    file the app can no longer read shows *"could not be read — choose it
+    again"*; it will not connect with a custom CA until you do.
   - **Skip TLS verification** — off by default. Turning it on shows a loud
     red warning and marks the profile; use it only against local dev servers.
   - **Default auth method** — which login form appears first for this profile.
@@ -158,7 +163,51 @@ Non-KV mounts are badged in the mounts pane and open their own panel.
 
 ---
 
-## 6. Sessions and updates
+## 6. Trial and purchase
+
+Vaulted is free for **15 days**, with nothing held back — every feature in this
+manual works during the trial, and there is no sign-up. After that it is a
+one-time purchase: not a subscription, and updates are included. This applies
+to the Microsoft Store and Mac App Store builds; the macOS build downloaded
+directly is free.
+
+- **On Windows** the trial starts the moment you install from the Store.
+- **On the Mac App Store** you start it yourself: the first launch shows what
+  the trial includes, what stops when it ends and that buying is a one-time
+  purchase, with **Start free trial** and **Buy Vaulted** buttons. Starting
+  the trial is a free purchase, so the App Store may ask for your Apple ID.
+  The trial follows your Apple ID — it is 15 days per person, not per Mac,
+  and reinstalling does not restart it. **Restore Purchases** brings a licence
+  bought on another Mac to this one.
+- A banner across the top shows the days remaining, and sharpens in the last
+  few days. **Buy Vaulted** opens the store's purchase flow inside the app;
+  once it completes the banner disappears immediately, with no restart.
+- Dismissing the store dialog without buying changes nothing and is not
+  treated as an error.
+- **When the trial ends**, Vaulted stops working until it is bought. Your Vault
+  session is signed out and the token wiped from memory at that moment — the
+  same thing an idle lock does — so nothing is being held. Your servers,
+  settings and any remembered tokens are exactly where you left them.
+- Signing out, deleting a server (which also removes its remembered token),
+  changing settings, checking for updates and quitting all still work while the
+  trial is over. A billing state never stands between you and ending a session
+  cleanly.
+- Nothing about your security changes with your entitlement: TLS verification,
+  presence checks (Windows Hello / Touch ID), idle lock, zeroization and
+  clipboard clearing behave identically before and after you buy. None of them is a paid feature.
+- If the store cannot be reached, Vaulted carries on working. It only stops
+  when it has been told plainly that the trial has ended, never because it
+  could not ask.
+
+## 7. Sessions and updates
+
+**Two macOS builds.** Vaulted for Mac comes two ways: the **Mac App Store**
+build (paid, 15-day trial, updated by the App Store) and the **direct** build
+downloaded as a `.dmg` (free, updates itself). They are the same app, but
+macOS keeps them apart: each has its own server profiles and remembered
+tokens, so installing one next to the other does not move anything across
+— add your servers again. **Settings ⚙** says which build you are running
+at the bottom of the dialog.
 
 - **Token renewal** — a renewable session auto-renews in the background at
   ~2/3 of its TTL. The header shows a live **countdown** and a state chip
@@ -166,11 +215,47 @@ Non-KV mounts are badged in the mounts pane and open their own panel.
   the token is wiped and you're returned to the login view.
 - **Log out** clears the session; **Log out & forget token** also removes the
   remembered token from the keychain.
+- **Appearance** — **Settings ⚙** offers *Midnight* (the default dark glass),
+  *Light*, and *Follow Windows*. Following Windows adopts both your light/dark
+  setting and your accent colour, and tracks them while Vaulted is running —
+  change either in Windows Settings and the app follows without a restart. Your
+  choice is remembered.
+  - A Windows accent can be any colour, so Vaulted picks the text on
+    accent-coloured buttons for readability rather than assuming white. A pale
+    accent gets dark text.
+  - *Follow Windows* only appears where Windows exposes those settings.
+- **Idle lock** — after 15 minutes without activity (configurable in
+  **Settings ⚙**, including *Never*), Vaulted locks: the token is wiped from
+  memory, secrets are cleared from the screen, and every Vault action is
+  refused. A warning appears shortly before, and any mouse or keyboard input
+  cancels it. Unlock with **Windows Hello** or **Touch ID** (a Mac without a
+  sensor asks for your account password instead) — your Vault session is
+  preserved, so you are not signing in again. Anything unsaved in the secret editor is
+  discarded, which is what the warning is there to prevent.
+  - **Renewal stops while locked**, deliberately: an unattended machine should
+    not keep extending a Vault token. The locked screen counts down the token's
+    remaining life, and once it runs out the lock becomes a full sign-out that
+    does need a real login.
+  - Search indexes **survive a lock** — unlocking does not mean re-crawling —
+    but a content index still *building* when the lock hits is abandoned, and
+    you are told so on return.
+  - On Windows, where the machine has no fingerprint, face, or PIN set up,
+    there is nothing to unlock with, so Vaulted **signs out** at the deadline
+    instead of locking. The Settings dialog says which of the two your machine
+    does. A Mac always locks: the account password is the fallback.
+- **Opening a server with a remembered token asks for Windows Hello or Touch
+  ID first.**
+  This is not part of the idle-lock setting and cannot be switched off —
+  setting the timeout to *Never* does not affect it. If you would rather not be
+  asked, do not tick *Remember in OS keychain* when signing in; you will type
+  your credentials each time instead.
 - **Updates** — **Check for updates** (in the sidebar) looks for a newer
   signed release; a quiet check also runs at startup. When one is available a
   banner shows the version and notes. **Install & restart** downloads it,
   verifies its signature, and relaunches — this only happens when you click
-  it, so an authenticated session is never interrupted unexpectedly.
+  it, so an authenticated session is never interrupted unexpectedly. In the
+  Mac App Store build, **Check for updates** opens the App Store's Updates
+  page instead; the App Store delivers updates.
 
 ---
 
