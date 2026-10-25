@@ -215,6 +215,17 @@ at the bottom of the dialog.
   the token is wiped and you're returned to the login view.
 - **Log out** clears the session; **Log out & forget token** also removes the
   remembered token from the keychain.
+- **"Vaulted wants to use your confidential information stored in
+  io.space-whale.vault-client"** — a one-time macOS prompt after updating the
+  direct (`.dmg`) build past 0.1.10. Vaulted's identifier changed to
+  `site.ironmade.vault-client`, so macOS asks before letting the renamed app
+  read a token the old one remembered. It appears after Touch ID, once per
+  server whose token you remembered. Click **Allow**: the token moves to the
+  new name and you are not asked again. **Deny** is safe too — you sign in to
+  that server once and can tick *Remember* again. Your servers and settings
+  carry over without any prompt. **On Windows** the same move happens
+  silently when the Store delivers the update: servers, settings and
+  remembered tokens carry over with nothing to click.
 - **Appearance** — **Settings ⚙** offers *Midnight* (the default dark glass),
   *Light*, and *Follow Windows*. Following Windows adopts both your light/dark
   setting and your accent colour, and tracks them while Vaulted is running —
@@ -253,9 +264,9 @@ at the bottom of the dialog.
   signed release; a quiet check also runs at startup. When one is available a
   banner shows the version and notes. **Install & restart** downloads it,
   verifies its signature, and relaunches — this only happens when you click
-  it, so an authenticated session is never interrupted unexpectedly. In the
-  Mac App Store build, **Check for updates** opens the App Store's Updates
-  page instead; the App Store delivers updates.
+  it, so an authenticated session is never interrupted unexpectedly. The
+  Mac App Store build has no update control at all: the App Store keeps it
+  up to date, like any other app installed from it.
 
 ---
 
