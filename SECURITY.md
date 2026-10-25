@@ -36,6 +36,13 @@ and copies via a backend clipboard command that **auto-clears after ~30
 seconds**. For KV fields, "copy" re-reads the value in the backend so it need
 not pass through the webview at all.
 
+**Release builds keep a warnings-only log.** A small log file in the app's
+own log directory (inside the sandbox container for the App Store build)
+records warnings such as a licence check that failed open or a settings
+store that could not be read. Warnings never include tokens, secret values,
+passwords or server responses; the log exists so a "why did it do that"
+question has an answer without a debug build.
+
 **Locked-down webview.** A restrictive Content Security Policy; developer tools
 compiled out of release builds; the webview is granted only the minimal set of
 plugin permissions it needs (notably, it has no direct clipboard permission —
@@ -202,7 +209,7 @@ These are known and deliberate, documented so they aren't surprises:
   ID-signed and notarized, updates itself over the minisign-verified feed,
   and has no licence gate. The two keep separate profiles and keychain
   tokens: the App Store build is `site.ironmade.vaulted` to macOS, the
-  direct build `io.space-whale.vault-client`, so they have different sandbox
+  direct build `site.ironmade.vault-client`, so they have different sandbox
   containers, keychain access groups and config paths.
   **Settings ⚙** states which build is running. A copy of the App Store
   `.pkg` is attached to each GitHub release as a record of what was
@@ -217,6 +224,31 @@ These are known and deliberate, documented so they aren't surprises:
   Keychain "Allow" prompt on the first launch of a build signed with a new
   identity, because keychain items are anchored to the app's code identity.
   Windows is not in this bullet — see below.
+- **The direct build and Windows changed identifier, and migrate without
+  weakening the token gate.** Up to 0.1.10 both were
+  `io.space-whale.vault-client`; they are now `site.ironmade.vault-client`.
+  On macOS the identifier is part of the Developer ID designated
+  requirement, so to macOS the renamed app is a different app. The Windows
+  specifics are in the Windows section below.
+  - **Configuration** (`profiles.json`, `settings.json`, which hold no
+    secrets) is copied once at startup from the old application-support
+    directory, never overwriting and never deleting the original.
+  - **Remembered tokens are not migrated at startup.** A token is moved only
+    when it is read for use: after the presence check (Touch ID or the
+    account password), the token store looks under the new service, then
+    under the old one; a token found there is stored under the new service
+    and the old item deleted. No code path reads an old item without that
+    check, and the App Store and Windows builds have no old service to read.
+  - Reading the old item makes **macOS** show its own Keychain prompt, once
+    per token, because the item's ACL trusts the previous identity. Allowing
+    it is expected; denying it leaves the user signed out of that profile,
+    with nothing read.
+  - **Forgetting a token** (profile delete, *Log out & forget token*) deletes
+    it under both service names, so "forget" holds whether or not the token
+    was ever migrated.
+  - The old application-support, Logs, WebKit and Caches directories are
+    left in place. The first two hold no secrets; removing them is deferred
+    so a downgrade keeps working.
 
 ## Windows packaging and code signing
 
@@ -257,8 +289,8 @@ resolve a package it cannot install.
 expect.** Filesystem virtualization — where a packaged app's writes are
 redirected into its own private store — is an *AppContainer* behaviour. This
 package runs full trust, so it does ordinary Win32 file I/O: it reads and
-writes `%APPDATA%\io.space-whale.vault-client\`, exactly the path an
-unpackaged build uses. Verified against the installed package, whose own
+writes `%APPDATA%\site.ironmade.vault-client\` (`io.space-whale.vault-client`
+up to 0.1.10), exactly the path an unpackaged build uses. Verified against the installed package, whose own
 `LocalCache` tree is empty. Packaged and unpackaged builds therefore share one
 set of profiles, and moving between them loses nothing.
 
@@ -267,6 +299,18 @@ MSIX. If the app were ever moved into the AppContainer sandbox, configuration
 *would* be virtualized, profiles would appear to vanish, and Credential
 Manager tokens — which are not virtualized — would survive as orphans. That
 migration would then have to be written.
+
+**The identifier change does migrate, using the same code as macOS.** On
+first launch the renamed build copies `profiles.json` and `settings.json`
+from `%APPDATA%\io.space-whale.vault-client\`, never overwriting and leaving
+the originals. A remembered token is moved from the Credential Manager
+target `<profile-id>.io.space-whale.vault-client` to
+`<profile-id>.site.ironmade.vault-client` the first time it is read, which is
+after Windows Hello wherever Hello is set up — the same gate as any
+remembered token. Credential Manager has no per-application access control,
+so unlike macOS there is no prompt; that is not a new exposure, because any
+process running as the user could already read the old entry. Forgetting a
+token deletes it under both names.
 
 ## Reporting
 
